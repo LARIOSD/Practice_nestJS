@@ -1,14 +1,14 @@
 version: '3.3'
 
 services:
-  mongodb:
-    container_name: mongo_DB
-    image: mongo
-    restart: always
-    ports: 
-      - $MONGO_LOCAL_PORT:$MONGO_DOCKER_PORT
-    volumes:
-      - mongodata:/data/db
+  # mongodb:
+  #   container_name: mongo_DB
+  #   image: mongo
+  #   restart: always
+  #   ports: 
+  #     - $MONGO_LOCAL_PORT:$MONGO_DOCKER_PORT
+  #   volumes:
+  #     - mongodata:/data/db
       
   mysqldb:
     container_name: mysql_DB
@@ -19,20 +19,20 @@ services:
       --default-authentication-plugin=mysql_native_password
       --lower_case_table_names=1
     environment:
-      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
-      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_ROOT_PASSWORD: d4t4b4s3
+      MYSQL_DATABASE: school
     ports:
-      - $MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT
+      - 3306:3306
     volumes:
       - mysql:/var/lib/mysql
       - mysql_config:/etc/mysql
   
-  redis:
-    container_name: redis_tekneo
-    image: redis
-    restart: always
-    ports:
-      - $REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
+  # redis:
+  #   container_name: redis
+  #   image: redis
+  #   restart: always
+  #   ports:
+  #     - $REDIS_LOCAL_PORT:$REDIS_DOCKER_PORT
 
 volumes:
   mysql:
