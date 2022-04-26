@@ -1,24 +1,28 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn({
         type : 'bigint',
-        name : 'user_id'
+        name : 'id'
     })
     id: number;
 
     @Column({
-        name: 'user_name'
+        name     : 'userName',
+        nullable : false,
     })
-    name: string;
+    userName: string;
 
     @Column({
-        name: 'lastname'
+        name     : 'lastName',
+        nullable : false,
     })
-    lastname:string;
+    lastName:string;
 
     @Column({
-        name: 'email_addres'
+        name     : 'emailAddres',
+        nullable : false,
+
     })
     emailAddress: string;
 
@@ -27,4 +31,10 @@ export class User {
         nullable : false,
     })
     password: string;
+
+    // @Column({ 
+    //     type    : 'date',
+    //     default : Date,
+    // })
+    // createdAt: Date;
 }
