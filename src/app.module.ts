@@ -3,7 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
-
+import { ConfigModule } from './config/config.module';
+import { Connection } from 'typeorm';
 @Module({
   imports: [UsersModule,
   TypeOrmModule.forRoot({
@@ -11,13 +12,16 @@ import { UsersModule } from './users/users.module';
     host        : 'localhost',
     port        : 3306,
     username    : 'root',
-    password    : 'root',
-    database    : 'test',
+    password    : 'd4t4b4s3',
+    database    : 'school',
     entities    : ['dist/**/*.entity{.ts,.js}'],
     synchronize : true,
-  })
+  }),
+  ConfigModule
   ],
   controllers : [AppController],
   providers   : [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection : Connection){}
+}
