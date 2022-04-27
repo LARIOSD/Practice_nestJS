@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
 } from '@nestjs/common';
@@ -16,27 +16,28 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  public create(@Body() body: CreateUserDto) : Promise<CreateUserDto> {
+    return this.usersService.create(body);
   }
 
   @Get()
-  findAll() {
+  public findAll() : Promise<CreateUserDto[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  public findOne(@Param('id') id: number) : Promise<CreateUserDto> {
     return this.usersService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  @Put(':id')
+  public update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) : Promise<CreateUserDto> {
     return this.usersService.update(+id, updateUserDto);
   }
-
+  
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  public remove(@Param('id') id: number) : Promise<number[]> {
     return this.usersService.remove(+id);
   }
+
 }
