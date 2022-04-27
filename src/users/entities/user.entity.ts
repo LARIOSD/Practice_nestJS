@@ -31,7 +31,7 @@ export class User {
 
     @Column({
         name     : 'password',
-        length   : 30,
+        length   : 64,
         nullable : false,
     })
     password: string;    
