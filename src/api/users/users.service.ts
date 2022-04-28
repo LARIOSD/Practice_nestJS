@@ -7,11 +7,16 @@ import userData from './interfaces/users.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
+import { ResponseService } from 'src/response/response.service';
 @Injectable()
 export class UsersService {
 
   @InjectRepository(User)
   private readonly userRepository : Repository<User>;
+
+  constructor(
+    private reponseService : ResponseService,
+  ){}
 
   public async create(userData: CreateUserDto): Promise<any> {
     try {
@@ -31,6 +36,7 @@ export class UsersService {
   }
   
   public async findAll() : Promise<User[]> {
+    this.reponseService.setLog();
     const userRead : userData[] = await this.userRepository.find(); 
     return userRead;
   }
