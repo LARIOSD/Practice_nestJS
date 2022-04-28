@@ -1,28 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import userData from './interfaces/users.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 @Injectable()
 export class UsersService {
 
   @InjectRepository(User)
   private readonly userRepository : Repository<User>;
 
-  public async create(userData: CreateUserDto): Promise<User> {
-    const { password, ...user } :CreateUserDto = {...userData}; 
-
-    const encryptedPassword : string = await bcrypt.hash(password,10);
-    const newUser : CreateUserDto = { password: encryptedPassword, ...user }
-
-    const userInsert : userData =  await this.userRepository.save(newUser);
-    return userInsert;
+  public async create(userData: CreateUserDto): Promise<any> {
+    try {
+      const { password, ...user } :CreateUserDto = {...userData}; 
+      const encryptedPassword : string = await bcrypt.hash(password,10);
+      const newUser : CreateUserDto = { password: encryptedPassword, ...user }
+      
+      const userInsert : userData =  await this.userRepository.save(newUser);
+      return userInsert;
+      
+    } catch (error) {
+      const {code,sqlMessage} = error
+      const response = {status: 500, code, message: sqlMessage}
+      return response;
+      
+    }
   }
-
+  
   public async findAll() : Promise<User[]> {
     const userRead : userData[] = await this.userRepository.find(); 
     return userRead;
@@ -33,21 +40,37 @@ export class UsersService {
     return userReadOne;
   }
 
-  public async update(id: number, userData: UpdateUserDto) : Promise<User> {
-    const { password, ...user } : UpdateUserDto = {...userData};
+  public async update(id: number, userData: UpdateUserDto) : Promise<any> {
+    try {
+      const { password, ...user } : UpdateUserDto = {...userData};
+      
+      const userDB : userData = await this.findOne(id);
     
-    const userDB : userData = await this.findOne(id);
-    if (!userDB || bcrypt.compare(password, userDB.password)) {
-      console.log('Error');
+      if (!userDB || !bcrypt.compareSync(password, userDB.password)) {
+        throw new NotFoundException({ 
+          status  : HttpStatus.UNAUTHORIZED,
+          message : 'Incorrect username or password', 
+          code    : 'INVALID_CREDENTIALS'
+        });
+      }
+      
+      const newPasword : string = user.newPassword ? bcrypt.hashSync(user.newPassword, 10) : userDB.password;
+      const newUser: UpdateUserDto = {password: newPasword, ...user}  
+      await this.userRepository.update(id, newUser);
+      
+      const userUpdate :userData = await this.findOne(id);
+      return userUpdate;
+    } catch (error) {
+      let response: any;
+      if(error.response){
+        response = {...error.response}
+      }else{
+        const { code, sqlMessage} = error
+        response = {status: 500, code, message: sqlMessage}
+      }
+      
+      return response;
     }
-    console.log(bcrypt.compare(password, userDB.password));
-    
-    const newPasword : string = user.newPassword ? await bcrypt.hash(user.newPassword, 10) : userDB.password;
-    const newUser: UpdateUserDto = {password: newPasword, ...user}  
-    await this.userRepository.update(id, newUser);
-    
-    const userUpdate :userData = await this.findOne(id);
-    return userUpdate;
   }
 
   public async remove(id: number)  : Promise<number[]> {

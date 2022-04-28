@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Controller,
   Get,
@@ -16,7 +17,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  public create(@Body() body: CreateUserDto) : Promise<CreateUserDto> {
+  public create(@Body() body: CreateUserDto) : Promise<any> {
     return this.usersService.create(body);
   }
 
@@ -31,7 +32,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  public update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) : Promise<CreateUserDto> {
+  public update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) : Promise<any> {
     return this.usersService.update(+id, updateUserDto);
   }
   

@@ -11,6 +11,7 @@ export class User {
         name     : 'userName',
         length   : 30,
         nullable : false,
+        unique   : true,
     })
     userName: string;
 
@@ -25,7 +26,7 @@ export class User {
         name     : 'emailAddres',
         length   : 30,
         nullable : false,
-
+        unique   : true,
     })
     emailAddress: string;
 
