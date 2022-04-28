@@ -17,18 +17,7 @@ console.log(TypeOrmConfigService);
   imports: [
   TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
   ConfigModule.forRoot({ envFilePath, isGlobal: true }),
-  UsersModule,
-  // TypeOrmModule.forRoot({
-  //   type        : 'mysql',
-  //   host        : 'localhost',
-  //   port        : 3306,
-  //   username    : 'root',
-  //   password    : 'meinsm',
-  //   database    : 'school',
-  //   entities    : ['dist/**/*.entity{.ts,.js}'],
-  //   synchronize : true,
-  // }),
-  
+  UsersModule,  
   ],
   controllers : [AppController],
   providers   : [AppService],
