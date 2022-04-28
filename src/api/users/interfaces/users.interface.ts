@@ -4,7 +4,6 @@ export default interface userData {
     lastName: string;
     emailAddress: string;
     password: string;
-    newPassword?: string
     createdAt: Date;
     updatedAt: Date;
 }

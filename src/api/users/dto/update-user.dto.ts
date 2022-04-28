@@ -6,5 +6,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @IsOptional()
     @MinLength(8)
     @MaxLength(25)
-    newPasword: string;
+    newPassword: string;
 }

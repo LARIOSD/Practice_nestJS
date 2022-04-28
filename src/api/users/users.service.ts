@@ -37,12 +37,12 @@ export class UsersService {
     const { password, ...user } : UpdateUserDto = {...userData};
     
     const userDB : userData = await this.findOne(id);
-    if (!userDB || bcrypt.compareSync(password, userDB.password)) {
+    if (!userDB || bcrypt.compare(password, userDB.password)) {
       console.log('Error');
     }
-    console.log(bcrypt.compareSync(password, userDB.password));
+    console.log(bcrypt.compare(password, userDB.password));
     
-    const newPasword : string = userDB.newPassword ? await bcrypt.hash(userDB.newPassword, 10) : userDB.password;
+    const newPasword : string = user.newPassword ? await bcrypt.hash(user.newPassword, 10) : userDB.password;
     const newUser: UpdateUserDto = {password: newPasword, ...user}  
     await this.userRepository.update(id, newUser);
     
