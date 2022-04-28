@@ -2,7 +2,8 @@ module.exports = {
     'env': {
         'browser' : true,
         'es2021'  : true,
-        'node'    : true
+        'node'    : true,
+        'jest'    : true
     },
     'extends': [
         'eslint:recommended',
@@ -10,12 +11,15 @@ module.exports = {
     ],
     'parser'        : '@typescript-eslint/parser',
     'parserOptions' : {
-        'ecmaVersion' : 'latest',
-        'sourceType'  : 'module'
+        'project'         : 'tsconfig.json',
+        'tsconfigRootDir' : __dirname, 
+        'sourceType'      : 'module',
     },
     'plugins': [
-        '@typescript-eslint'
+        '@typescript-eslint/eslint-plugin'
     ],
+    'root': true,
+    'ignorePatterns': ['.eslintrc.js'],
     'rules': {
         'key-spacing': [
             'error', {
