@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { ConfigModule } from './config/config.module';
+import { UsersModule } from './api/users/users.module';
+// import { ConfigModule } from './config/config.module';
 import { Connection } from 'typeorm';
 @Module({
   imports: [UsersModule,
@@ -17,7 +17,7 @@ import { Connection } from 'typeorm';
     entities    : ['dist/**/*.entity{.ts,.js}'],
     synchronize : true,
   }),
-  ConfigModule
+//  ConfigModule
   ],
   controllers : [AppController],
   providers   : [AppService],
