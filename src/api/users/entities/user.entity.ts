@@ -23,6 +23,20 @@ export class User {
     lastName:string;
 
     @Column({
+        name     : 'firstName',
+        length   : 30,
+        nullable : false,
+    })
+    firstName:string;
+
+    @Column({
+        name     : 'phoneNumber',
+        length   : 15,
+        nullable : false,
+    })
+    phoneNumber:string;
+
+    @Column({
         name     : 'emailAddres',
         length   : 30,
         nullable : false,

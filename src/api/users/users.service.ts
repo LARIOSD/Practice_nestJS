@@ -6,8 +6,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import userData from './interfaces/users.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { ResponseService } from 'src/response/response.service';
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 @Injectable()
 export class UsersService {
 
@@ -30,13 +30,12 @@ export class UsersService {
     } catch (error) {
       const {code,sqlMessage} = error
       const response = {status: 500, code, message: sqlMessage}
-      return response;
+      throw response;
       
     }
   }
   
   public async findAll() : Promise<User[]> {
-    this.reponseService.setLog();
     const userRead : userData[] = await this.userRepository.find(); 
     return userRead;
   }
@@ -49,9 +48,7 @@ export class UsersService {
   public async update(id: number, userData: UpdateUserDto) : Promise<any> {
     try {
       const { password, ...user } : UpdateUserDto = {...userData};
-      
       const userDB : userData = await this.findOne(id);
-    
       if (!userDB || !bcrypt.compareSync(password, userDB.password)) {
         throw new NotFoundException({ 
           status  : HttpStatus.UNAUTHORIZED,
@@ -67,6 +64,7 @@ export class UsersService {
       const userUpdate :userData = await this.findOne(id);
       return userUpdate;
     } catch (error) {
+      this.reponseService.responseError(error);
       let response: any;
       if(error.response){
         response = {...error.response}
@@ -75,7 +73,7 @@ export class UsersService {
         response = {status: 500, code, message: sqlMessage}
       }
       
-      return response;
+      throw response;
     }
   }
 
